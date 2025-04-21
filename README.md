@@ -78,9 +78,9 @@ Implementation of TD3 with:
 - The agent achieved an average reward of 1053
 - Zero collision rate in the evaluation
 - Successful navigation through all waypoints to the final destination
+- The Q-values converged to around 750 (max) and 360 (average), indicating stable learning.
 ![Image](https://github.com/user-attachments/assets/82513bf3-bba9-4b39-832a-4fb3c46e414f)
 ![Image](https://github.com/user-attachments/assets/70b6ebed-628a-4161-b1a1-ec8a8e1011ea)
 ![Image](https://github.com/user-attachments/assets/3d713dd5-4bb0-4a27-8a88-4684f1b10dda)
-The Q-values converged to around 750 (max) and 360 (average), indicating stable learning.
 
 For more details, please refer to the documentation.[Thesis.Presentation.pdf](https://github.com/user-attachments/files/19834484/Thesis.Presentation.pdf)
