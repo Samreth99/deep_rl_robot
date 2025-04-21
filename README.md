@@ -1,4 +1,4 @@
-# Autonomous Robot Navigation using TD3
+# Deep Reinforcement Learning for Robot Navigation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
