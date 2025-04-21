@@ -1,0 +1,1 @@
+/home/reth/ros2_ws/build/my_robot_controller/ament_cmake_environment_hooks/pythonpath.sh

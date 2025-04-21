@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<robot name="bumper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Move this one to ros2 control -->
+    <transmission name="wheel_right_transmission">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <actuator name="wheel_right_motor" role="actuator_right"/>
+        <joint name="wheel_right_joint"    role="joint_right">
+            <mechanical_reduction>1.0</mechanical_reduction>
+        </joint>
+    </transmission>
+
+    <transmission name="wheel_left_transmission">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <actuator name="wheel_left_motor" role="actuator_left"/>
+        <joint name="wheel_left_joint"    role="joint_left">
+            <mechanical_reduction>1.0</mechanical_reduction>
+        </joint>
+    </transmission>
+
+    <gazebo reference="base_link">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="wheel_right_link">
+        <mu1>1000000000000000.0</mu1>
+        <mu2>1000000000000000.0</mu2>
+        <kp>1000000000000.0</kp>
+        <kd>10.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>0.1</maxVel>
+        <fdir1>1 0 0</fdir1>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="wheel_right_joint">
+        <mu1>1000000000000000.0</mu1>
+        <mu2>1000000000000000.0</mu2>
+        <kp>1000000000000.0</kp>
+        <kd>10.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>0.1</maxVel>
+        <fdir1>1 0 0</fdir1>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="caster_front_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>1.0</maxVel>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="caster_rear_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>1.0</maxVel>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    
+   <!-- ROS 2 Control -->
+    <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>
+            <parameters>$(find my_robot_controller)/config/my_robot_controllers.yaml</parameters>
+        </plugin>
+    </gazebo>
+
+    <gazebo reference="scan_link">
+        <material>Gazebo/Red</material>
+        <sensor name="lidar_sensor" type="lidar">
+            <pose>0 0 0 0 0 0</pose> <!-- positon + orientation, origine of sensor relative to camera link-->
+            <visualize>true</visualize> <!-- visualize lidar on Gazebo -->
+            <update_rate>100</update_rate> <!-- rate (Hz) of Gazebo read data from sensor -->
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14156</min_angle>
+                        <max_angle>3.14156</max_angle>
+                        <resolution>1</resolution>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.08</min>
+                    <max>10</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+            <plugin name="my_ray_sensor_plugin" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <argument>~/out:=scan</argument>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>scan_link</frame_name>
+            </plugin>
+        </sensor>
+
+    </gazebo>
+
+    <gazebo>
+        <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <!-- Update rate in Hz -->
+            <update_rate>50</update_rate>
+            <!-- wheels -->
+            <left_joint>wheel_left_joint</left_joint>
+            <right_joint>wheel_right_joint</right_joint>
+            <!-- kinematics -->
+            <wheel_separation>0.17</wheel_separation>
+            <wheel_diameter>0.066</wheel_diameter>
+            <max_wheel_torque>20</max_wheel_torque>
+            <max_wheel_acceleration>1.8</max_wheel_acceleration>
+            <command_topic>cmd_vel</command_topic>
+            <!-- output -->
+            <publish_odom>true</publish_odom>
+            <publish_odom_tf>true</publish_odom_tf> 
+            <publish_wheel_tf>true</publish_wheel_tf> <!-- publush right/left wheel joint on tf -->
+            <odometry_topic>odom</odometry_topic>
+            <odometry_frame>odom</odometry_frame>
+            <robot_base_frame>base_footprint</robot_base_frame>
+        </plugin>
+    </gazebo>
+
+    <gazebo reference="imu_link">
+        <material>Gazebo/Red</material>
+        <sensor name="my_imu" type="imu">
+            <always_on>true</always_on>
+            <update_rate>200</update_rate>
+            <imu>
+                <angular_velocity>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>2e-4</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>2e-4</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>2e-4</stddev>
+                        </noise>
+                    </z>
+                </angular_velocity>
+                <linear_acceleration>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>1.7e-2</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>1.7e-2</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>1.7e-2</stddev>
+                        </noise>
+                    </z>
+                </linear_acceleration>
+            </imu>
+            <plugin name="my_imu" filename="libgazebo_ros_imu_sensor.so">
+                <ros>
+                    <!-- <namespace>/tb3</namespace> -->
+                    <remapping>~/out:=imu</remapping>
+                </ros>
+            </plugin>
+        </sensor>
+
+    </gazebo>
+
+</robot>

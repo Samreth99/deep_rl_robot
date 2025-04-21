@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="lidar_length" value="0.025"/>
+    <xacro:property name="lidar_radius" value="0.05" />
+
+    <link name="base_scan_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${lidar_radius}" length="${lidar_length}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${lidar_radius}" length="${lidar_length}"/>
+            </geometry>
+        </collision>
+        <xacro:cylinder_inertia m="0.05" r="${lidar_radius}" h="${lidar_length}"
+                                xyz="0 0 0" rpy="0 0 0" />
+    </link>
+
+    <joint name="base_scan_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_scan_link"/>
+        <origin xyz="0 0 ${base_height + lidar_length/2.0}" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo reference="base_scan_link">
+        <material>Gazebo/Red</material>
+        <sensor name="lidar_sensor" type="lidar">
+            <pose>0 0 0 0 0 0</pose> <!-- positon + orientation, origine of sensor relative to camera link-->
+            <visualize>true</visualize> <!-- visualize lidar on Gazebo -->
+            <update_rate>100.0</update_rate> <!-- rate (Hz) of Gazebo read data from sensor -->
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14156</min_angle>
+                        <max_angle>3.14156</max_angle>
+                        <resolution>1</resolution>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.08</min>
+                    <max>10</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+            <plugin name="my_ray_sensor_plugin" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <argument>~/out:=scan</argument>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>base_scan_link</frame_name>
+            </plugin>
+        </sensor>
+
+    </gazebo>
+
+</robot>
