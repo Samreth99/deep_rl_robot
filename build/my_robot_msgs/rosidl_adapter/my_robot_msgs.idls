@@ -1,8 +1,0 @@
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:msg/SensorState.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:msg/Sound.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:msg/VersionInfo.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:srv/Sound.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:srv/DrlStep.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:srv/Goal.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:srv/RingGoal.idl
-/home/reth/ros2_ws/build/my_robot_msgs/rosidl_adapter/my_robot_msgs:action/Patrol.idl

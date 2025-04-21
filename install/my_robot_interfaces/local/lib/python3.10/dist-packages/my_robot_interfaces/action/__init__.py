@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/build/my_robot_interfaces/rosidl_generator_py/my_robot_interfaces/action/__init__.py

@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/build/drl/ament_cmake_environment_hooks/local_setup.bash

@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/src/my_robot_bringup/launch/robot_state_publisher.launch.py

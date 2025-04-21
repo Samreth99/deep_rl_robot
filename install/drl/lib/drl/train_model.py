@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/src/drl/scripts/train_model.py

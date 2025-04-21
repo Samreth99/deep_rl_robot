@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/build/my_robot_interfaces/rosidl_generator_c/my_robot_interfaces/action/detail/count_until__type_support.h

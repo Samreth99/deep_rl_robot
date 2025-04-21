@@ -1,1 +1,0 @@
-/home/reth/ros2_ws/src/drl/launch/test_launch.py
